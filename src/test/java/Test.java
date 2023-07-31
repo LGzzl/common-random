@@ -1,5 +1,3 @@
-import xyz.zzlcjj.commons.random.RandomConstant;
-import xyz.zzlcjj.commons.random.enums.MailboxAccountType;
 import xyz.zzlcjj.commons.random.RandomUtils;
 
 /**
@@ -9,6 +7,8 @@ import xyz.zzlcjj.commons.random.RandomUtils;
 public class Test {
 
     public static void main(String[] args) {
-
+        for (int i = 0; i < 100; i++) {
+            System.out.println(RandomUtils.randomIdCard());
+        }
     }
 }

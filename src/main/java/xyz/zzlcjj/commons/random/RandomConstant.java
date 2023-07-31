@@ -1,7 +1,16 @@
 package xyz.zzlcjj.commons.random;
 
+import xyz.zzlcjj.commons.random.entity.Address;
+import xyz.zzlcjj.commons.random.entity.Area;
+import xyz.zzlcjj.commons.random.entity.City;
+import xyz.zzlcjj.commons.random.entity.Province;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -76,4 +85,61 @@ public class RandomConstant {
      * 身份证校验因子余数映射
      */
     protected static final char[] ID_CARD_CHECK_NUM_MAPPING = {'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
+
+    /**
+     * 全国各省份和地级市的map, key为code;value为名字
+     */
+    protected static final HashMap<String, String> ADDRESS_PROVINCE_CITY_MAP = new HashMap<>(500);
+
+    /**
+     * 全国各区县数组
+     */
+    protected static final ArrayList<Area> ADDRESS_AREAS = new ArrayList<>();
+
+    /**
+     * 获取省市信息
+     *
+     * @param code code
+     * @return 省市信息
+     */
+    public static Address getAddress(String code) {
+        String name = ADDRESS_PROVINCE_CITY_MAP.get(code);
+        if (name != null) {
+            if (code.length() == 2) {
+                return new Province(code, name);
+            } else {
+                return new City(code, name);
+            }
+        }
+        return null;
+    }
+
+    static {
+        final String areaFlag = "areas";
+        InputStream inputStream = RandomConstant.class.getClassLoader().getResourceAsStream("address.txt");
+        if (inputStream == null) {
+            throw new RuntimeException("address file is not found");
+        }
+        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+             BufferedReader reader = new BufferedReader(inputStreamReader)) {
+            String line = reader.readLine();
+            boolean isAreas = false;
+            while (line != null) {
+                if (areaFlag.equals(line)) {
+                    isAreas = true;
+                }
+                if (line.contains(",")) {
+                    String[] addressInfo = line.split(",");
+                    if (isAreas) {
+                        ADDRESS_AREAS.add(new Area(addressInfo[0], addressInfo[1]));
+                    } else {
+                        ADDRESS_PROVINCE_CITY_MAP.put(addressInfo[0], addressInfo[1]);
+                    }
+                }
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("address file load error", e);
+        }
+    }
 }

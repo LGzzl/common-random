@@ -1,12 +1,12 @@
 package xyz.zzlcjj.commons.random.enums;
 
 /**
- * 邮箱账号类型
+ * 字符串类型
  *
  * @author zzl
  * @since 2023/7/30
  */
-public enum MailboxAccountType {
+public enum StringType {
 
     /**
      * 纯数字
