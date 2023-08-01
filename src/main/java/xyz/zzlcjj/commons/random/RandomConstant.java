@@ -94,7 +94,7 @@ public class RandomConstant {
     /**
      * 全国各区县数组
      */
-    protected static final ArrayList<Area> ADDRESS_AREAS = new ArrayList<>();
+    public static final ArrayList<Area> ADDRESS_AREAS = new ArrayList<>();
 
     /**
      * 获取省市信息
